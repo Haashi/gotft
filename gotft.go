@@ -14,22 +14,20 @@ type GoTFT struct {
 	OCE *api.API
 	TR  *api.API
 	RU  *api.API
-	PBE *api.API
 }
 
 const (
-	BR  = "br1"
-	EUW = "euw1"
-	EUN = "eun1"
-	JP  = "jp1"
+	BR  = "br"
+	EUW = "euw"
+	EUN = "eun"
+	JP  = "jp"
 	KR  = "kr"
-	LAN = "la1"
-	LAS = "la2"
-	NA  = "na1"
-	OCE = "oc1"
-	TR  = "tr1"
+	LAN = "lan"
+	LAS = "las"
+	NA  = "na"
+	OCE = "oce"
+	TR  = "tr"
 	RU  = "ru"
-	PBE = "pbe1"
 )
 
 func NewGOTFT(apikey string, prodKey bool) *GoTFT {
@@ -45,6 +43,5 @@ func NewGOTFT(apikey string, prodKey bool) *GoTFT {
 	gotft.OCE = api.NewAPI(apikey, OCE, prodKey)
 	gotft.TR = api.NewAPI(apikey, TR, prodKey)
 	gotft.RU = api.NewAPI(apikey, RU, prodKey)
-	gotft.PBE = api.NewAPI(apikey, PBE, prodKey)
 	return gotft
 }
