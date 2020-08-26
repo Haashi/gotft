@@ -65,7 +65,7 @@ type Info struct {
 
 type Companion struct {
 	ContentId string `json:"content_ID"`
-	SkinID    string `json:"skin_ID"`
+	SkinID    int    `json:"skin_ID"`
 	Species   string `json:"species"`
 }
 

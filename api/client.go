@@ -24,10 +24,7 @@ func NewClient(apikey string, region string) *client {
 }
 
 func (c *client) Get(url string) (io.ReadCloser, error) {
-	request, err := http.NewRequest("GET", fmt.Sprintf(URLFormat, c.region, url), nil)
-	if err != nil {
-		return nil, err
-	}
+	request, _ := http.NewRequest("GET", fmt.Sprintf(URLFormat, c.region, url), nil)
 	request.Header.Add(tokenHeader, c.apiKey)
 	res, err := c.c.Do(request)
 	if err != nil {
@@ -35,10 +32,7 @@ func (c *client) Get(url string) (io.ReadCloser, error) {
 	}
 	if res.StatusCode == http.StatusTooManyRequests {
 		retry := res.Header.Get("Retry-After")
-		seconds, err := strconv.Atoi(retry)
-		if err != nil {
-			return nil, err
-		}
+		seconds, _ := strconv.Atoi(retry)
 		time.Sleep(time.Duration(seconds) * time.Second)
 		return c.Get(url)
 	}

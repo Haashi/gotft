@@ -26,12 +26,12 @@ func Test_matchClient_GetByPuuid(t *testing.T) {
 func Test_matchClient_GetMatch(t *testing.T) {
 	c := NewClient(apiKey, EUROPE)
 	mc := NewMatchClient(c)
-	matches, err := mc.GetMatch("EUW1_4770230362")
+	match, err := mc.GetMatch("EUW1_4770230362")
 	if err != nil {
 		t.Log(err)
 		t.FailNow()
 	}
-	if matches.Metadata.MatchId == "" {
+	if match.Metadata.MatchId == "" {
 		t.Log("match id is empty, something went wrong")
 		t.FailNow()
 	}
