@@ -1,6 +1,6 @@
 package gotft
 
-import "github.com/Haashi/gotft/api"
+import "github.com/haashi/gotft/api"
 
 type GoTFT struct {
 	BR  *api.API

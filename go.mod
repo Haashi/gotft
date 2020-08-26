@@ -1,3 +1,3 @@
-module github.com/Haashi/gotft
+module github.com/haashi/gotft
 
 go 1.15
