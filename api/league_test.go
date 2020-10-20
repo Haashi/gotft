@@ -12,13 +12,19 @@ func TestNewLeagueClient(t *testing.T) {
 func Test_leagueClient_GetMasterLeague(t *testing.T) {
 	c := NewClient(apiKey, EUW)
 	lc := NewLeagueClient(c)
-	master, err := lc.GetMasterLeague()
+	_, err := lc.GetMasterLeague()
 	if err != nil {
 		t.Log(err)
 		t.FailNow()
 	}
-	if master.LeagueId == "" {
-		t.Log("master leagueID is empty, something went wrong")
+}
+
+func Test_leagueClient_GetMasterLeague_Fail(t *testing.T) {
+	c := NewClient("wrongapikey", EUW)
+	lc := NewLeagueClient(c)
+	_, err := lc.GetMasterLeague()
+	if err == nil {
+		t.Log(err)
 		t.FailNow()
 	}
 }
@@ -26,13 +32,19 @@ func Test_leagueClient_GetMasterLeague(t *testing.T) {
 func Test_leagueClient_GetGrandmasterLeague(t *testing.T) {
 	c := NewClient(apiKey, EUW)
 	lc := NewLeagueClient(c)
-	grandmaster, err := lc.GetGrandmasterLeague()
+	_, err := lc.GetGrandmasterLeague()
 	if err != nil {
 		t.Log(err)
 		t.FailNow()
 	}
-	if grandmaster.LeagueId == "" {
-		t.Log("grandmaster leagueID is empty, something went wrong")
+}
+
+func Test_leagueClient_GetGrandmasterLeague_Fail(t *testing.T) {
+	c := NewClient("wrongapikey", EUW)
+	lc := NewLeagueClient(c)
+	_, err := lc.GetGrandmasterLeague()
+	if err == nil {
+		t.Log(err)
 		t.FailNow()
 	}
 }
@@ -40,13 +52,79 @@ func Test_leagueClient_GetGrandmasterLeague(t *testing.T) {
 func Test_leagueClient_GetChallengerLeague(t *testing.T) {
 	c := NewClient(apiKey, EUW)
 	lc := NewLeagueClient(c)
-	challenger, err := lc.GetChallengerLeague()
+	_, err := lc.GetChallengerLeague()
 	if err != nil {
 		t.Log(err)
 		t.FailNow()
 	}
-	if challenger.LeagueId == "" {
-		t.Log("challenger leagueID is empty, something went wrong")
+}
+
+func Test_leagueClient_GetChallengerLeague_Fail(t *testing.T) {
+	c := NewClient("wrongapikey", EUW)
+	lc := NewLeagueClient(c)
+	_, err := lc.GetChallengerLeague()
+	if err == nil {
+		t.Log(err)
+		t.FailNow()
+	}
+}
+
+func Test_leagueClient_GetBySummonerID(t *testing.T) {
+	c := NewClient(apiKey, EUW)
+	lc := NewLeagueClient(c)
+	_, err := lc.GetBySummonerID("cQqsUTIsR-TiXeV2LHALb5nx6tlma4UTavOj3u6KQseatVs")
+	if err != nil {
+		t.Log(err)
+		t.FailNow()
+	}
+}
+
+func Test_leagueClient_GetBySummonerID_Fail(t *testing.T) {
+	c := NewClient(apiKey, EUW)
+	lc := NewLeagueClient(c)
+	_, err := lc.GetBySummonerID("dQqsUTIsR-TiXeV2LHALb5nx6tlma4UTavOj3u6KQseatVs")
+	if err == nil {
+		t.Log(err)
+		t.FailNow()
+	}
+}
+
+func Test_leagueClient_GetByTier(t *testing.T) {
+	c := NewClient(apiKey, EUW)
+	lc := NewLeagueClient(c)
+	_, err := lc.GetByTier(TierGold, DivI, 1)
+	if err != nil {
+		t.Log(err)
+		t.FailNow()
+	}
+}
+
+func Test_leagueClient_GetByTier_Fail(t *testing.T) {
+	c := NewClient(apiKey, EUW)
+	lc := NewLeagueClient(c)
+	_, err := lc.GetByTier(TierGold, "VI", 1)
+	if err == nil {
+		t.Log(err)
+		t.FailNow()
+	}
+}
+
+func Test_leagueClient_GetById(t *testing.T) {
+	c := NewClient(apiKey, EUW)
+	lc := NewLeagueClient(c)
+	_, err := lc.GetById("dda7127a-bab9-3a9f-ad2f-7c798e3ce29a")
+	if err != nil {
+		t.Log(err)
+		t.FailNow()
+	}
+}
+
+func Test_leagueClient_GetById_Fail(t *testing.T) {
+	c := NewClient(apiKey, EUW)
+	lc := NewLeagueClient(c)
+	_, err := lc.GetById("eda7127a-bab9-3a9f-ad2f-7c798e3ce29a")
+	if err == nil {
+		t.Log(err)
 		t.FailNow()
 	}
 }

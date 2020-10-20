@@ -1,10 +1,11 @@
 package api
 
 import (
-	"errors"
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
+	"os"
 	"strconv"
 	"time"
 )
@@ -33,11 +34,25 @@ func (c *client) Get(url string) (io.ReadCloser, error) {
 	if res.StatusCode == http.StatusTooManyRequests {
 		retry := res.Header.Get("Retry-After")
 		seconds, _ := strconv.Atoi(retry)
+		fmt.Fprintf(os.Stdout, "rate limited, retrying in %ds\n", seconds)
 		time.Sleep(time.Duration(seconds) * time.Second)
 		return c.Get(url)
 	}
 	if res.StatusCode == http.StatusNotFound {
-		return nil, errors.New("ressource not found")
+		return nil, fmt.Errorf("ressource not found %s", url)
+	}
+	if res.StatusCode == http.StatusUnauthorized || res.StatusCode == http.StatusForbidden {
+		return nil, fmt.Errorf("unauthorized or forbidden, api key is probably wrong or expired")
+	}
+	if res.StatusCode == http.StatusBadRequest {
+		var data struct {
+			Status struct {
+				Message    string `json:"message"`
+				StatusCode int    `json:"status_code"`
+			} `json:"status"`
+		}
+		json.NewDecoder(res.Body).Decode(&data)
+		return nil, fmt.Errorf("%+v", data.Status.Message)
 	}
 	return res.Body, nil
 }

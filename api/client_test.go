@@ -13,6 +13,14 @@ func TestNoInternet(t *testing.T) {
 	}
 }
 
+func TestWrongApiKey(t *testing.T) {
+	c := NewClient("thisisawrongapikey", EUROPE)
+	_, err := c.Get("/league/v1/master")
+	if err == nil {
+		t.FailNow()
+	}
+}
+
 func TestNotFound(t *testing.T) {
 	c := NewClient(apiKey, EUROPE)
 	_, err := c.Get("/match/v1/matches/EUW1_4000230362")
