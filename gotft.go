@@ -16,32 +16,18 @@ type GoTFT struct {
 	RU  *api.API
 }
 
-const (
-	BR  = "br1"
-	EUN = "eun1"
-	EUW = "euw1"
-	JP  = "jp1"
-	KR  = "kr"
-	LAN = "la1"
-	LAS = "la2"
-	NA  = "na1"
-	OCE = "oc1"
-	RU  = "ru"
-	TR  = "tr1"
-)
-
-func NewGOTFT(apikey string) *GoTFT {
+func NewGOTFT(apikey string, options ...api.Option) *GoTFT {
 	gotft := &GoTFT{}
-	gotft.BR = api.NewAPI(apikey, BR)
-	gotft.EUN = api.NewAPI(apikey, EUN)
-	gotft.EUW = api.NewAPI(apikey, EUW)
-	gotft.JP = api.NewAPI(apikey, JP)
-	gotft.KR = api.NewAPI(apikey, KR)
-	gotft.LAN = api.NewAPI(apikey, LAN)
-	gotft.LAS = api.NewAPI(apikey, LAS)
-	gotft.NA = api.NewAPI(apikey, NA)
-	gotft.OCE = api.NewAPI(apikey, OCE)
-	gotft.RU = api.NewAPI(apikey, RU)
-	gotft.TR = api.NewAPI(apikey, TR)
+	gotft.BR = api.NewAPI(apikey, api.BR, options...)
+	gotft.EUN = api.NewAPI(apikey, api.EUN, options...)
+	gotft.EUW = api.NewAPI(apikey, api.EUW, options...)
+	gotft.JP = api.NewAPI(apikey, api.JP, options...)
+	gotft.KR = api.NewAPI(apikey, api.KR, options...)
+	gotft.LAN = api.NewAPI(apikey, api.LAN, options...)
+	gotft.LAS = api.NewAPI(apikey, api.LAS, options...)
+	gotft.NA = api.NewAPI(apikey, api.NA, options...)
+	gotft.OCE = api.NewAPI(apikey, api.OCE, options...)
+	gotft.RU = api.NewAPI(apikey, api.RU, options...)
+	gotft.TR = api.NewAPI(apikey, api.TR, options...)
 	return gotft
 }

@@ -6,7 +6,7 @@ import (
 )
 
 func TestNoInternet(t *testing.T) {
-	c := NewClient(apiKey, "badregion")
+	c := NewClient(apiKey, "badregion", log)
 	_, err := c.Get("/league/v1/master")
 	if err == nil {
 		t.FailNow()
@@ -14,7 +14,7 @@ func TestNoInternet(t *testing.T) {
 }
 
 func TestWrongApiKey(t *testing.T) {
-	c := NewClient("thisisawrongapikey", EUROPE)
+	c := NewClient("thisisawrongapikey", EUROPE, log)
 	_, err := c.Get("/league/v1/master")
 	if err == nil {
 		t.FailNow()
@@ -22,7 +22,7 @@ func TestWrongApiKey(t *testing.T) {
 }
 
 func TestNotFound(t *testing.T) {
-	c := NewClient(apiKey, EUROPE)
+	c := NewClient(apiKey, EUROPE, log)
 	_, err := c.Get("/match/v1/matches/EUW1_4000230362")
 	if err == nil {
 		t.FailNow()
@@ -30,7 +30,7 @@ func TestNotFound(t *testing.T) {
 }
 
 func TestTooManyRequest(t *testing.T) {
-	c := NewClient(apiKey, EUW)
+	c := NewClient(apiKey, EUW, log)
 	var wg sync.WaitGroup
 	for i := 0; i < 22; i++ {
 		wg.Add(1)

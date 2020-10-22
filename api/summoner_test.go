@@ -5,13 +5,13 @@ import (
 )
 
 func TestNewSummonerClient(t *testing.T) {
-	c := NewClient(apiKey, EUW)
-	_ = NewSummonerClient(c)
+	c := NewClient(apiKey, EUW, log)
+	_ = NewSummonerClient(c, log)
 }
 
 func Test_summonerClient_GetByName(t *testing.T) {
-	c := NewClient(apiKey, EUW)
-	sc := NewSummonerClient(c)
+	c := NewClient(apiKey, EUW, log)
+	sc := NewSummonerClient(c, log)
 	summoner, err := sc.GetByName("Haashi")
 	if err != nil {
 		t.Log(err)
@@ -24,8 +24,8 @@ func Test_summonerClient_GetByName(t *testing.T) {
 }
 
 func Test_summonerClient_GetByName_Fail(t *testing.T) {
-	c := NewClient(apiKey, EUW)
-	sc := NewSummonerClient(c)
+	c := NewClient(apiKey, EUW, log)
+	sc := NewSummonerClient(c, log)
 	_, err := sc.GetByName("Haashiiiiiiiiiiiii")
 	if err == nil {
 		t.Log(err)
@@ -34,8 +34,8 @@ func Test_summonerClient_GetByName_Fail(t *testing.T) {
 }
 
 func Test_summonerClient_GetByAccountId(t *testing.T) {
-	c := NewClient(apiKey, EUW)
-	sc := NewSummonerClient(c)
+	c := NewClient(apiKey, EUW, log)
+	sc := NewSummonerClient(c, log)
 	summoner, err := sc.GetByAccountId("KGtzAbSB_J3H2S2wYoDN51BRpJLHqyBx4vV7bJ8Yu14v8g")
 	if err != nil {
 		t.Log(err)
@@ -48,8 +48,8 @@ func Test_summonerClient_GetByAccountId(t *testing.T) {
 }
 
 func Test_summonerClient_GetByAccountId_Fail(t *testing.T) {
-	c := NewClient(apiKey, EUW)
-	sc := NewSummonerClient(c)
+	c := NewClient(apiKey, EUW, log)
+	sc := NewSummonerClient(c, log)
 	_, err := sc.GetByAccountId("BGtzAbSB_J3H2S2wYoDN51BRpJLHqyBx4vV7bJ8Yu14v8g")
 	if err == nil {
 		t.Log(err)
@@ -58,8 +58,8 @@ func Test_summonerClient_GetByAccountId_Fail(t *testing.T) {
 }
 
 func Test_summonerClient_GetByPuuid(t *testing.T) {
-	c := NewClient(apiKey, EUW)
-	sc := NewSummonerClient(c)
+	c := NewClient(apiKey, EUW, log)
+	sc := NewSummonerClient(c, log)
 	summoner, err := sc.GetByPuuid("5_QD37vWUa7Eq8jP6Cy-R18z60E9nRJlpkDZjqBGvtngedjANG6221udHyYnN2wCJCZV7CnlAqcnHQ")
 	if err != nil {
 		t.Log(err)
@@ -72,8 +72,8 @@ func Test_summonerClient_GetByPuuid(t *testing.T) {
 }
 
 func Test_summonerClient_GetByPuuid_Fail(t *testing.T) {
-	c := NewClient(apiKey, EUW)
-	sc := NewSummonerClient(c)
+	c := NewClient(apiKey, EUW, log)
+	sc := NewSummonerClient(c, log)
 	_, err := sc.GetByPuuid("6_QD37vWUa7Eq8jP6Cy-R18z60E9nRJlpkDZjqBGvtngedjANG6221udHyYnN2wCJCZV7CnlAqcnHQ")
 	if err == nil {
 		t.Log(err)
@@ -82,8 +82,8 @@ func Test_summonerClient_GetByPuuid_Fail(t *testing.T) {
 }
 
 func Test_summonerClient_GetById(t *testing.T) {
-	c := NewClient(apiKey, EUW)
-	sc := NewSummonerClient(c)
+	c := NewClient(apiKey, EUW, log)
+	sc := NewSummonerClient(c, log)
 	summoner, err := sc.GetById("cQqsUTIsR-TiXeV2LHALb5nx6tlma4UTavOj3u6KQseatVs")
 	if err != nil {
 		t.Log(err)
@@ -96,8 +96,8 @@ func Test_summonerClient_GetById(t *testing.T) {
 }
 
 func Test_summonerClient_GetById_Fail(t *testing.T) {
-	c := NewClient(apiKey, EUW)
-	sc := NewSummonerClient(c)
+	c := NewClient(apiKey, EUW, log)
+	sc := NewSummonerClient(c, log)
 	_, err := sc.GetById("dQqsUTIsR-TiXeV2LHALb5nx6tlma4UTavOj3u6KQseatVs")
 	if err == nil {
 		t.Log(err)

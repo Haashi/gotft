@@ -7,38 +7,52 @@ import (
 )
 
 type matchClient struct {
-	c *client
+	c   *client
+	log logger
 }
 
-func NewMatchClient(c *client) *matchClient {
+func NewMatchClient(c *client, log logger) *matchClient {
+	log.Debug("initializing match client")
 	mc := &matchClient{}
 	mc.c = c
+	mc.log = log
 	return mc
 }
 
-func (mc *matchClient) GetMatchesByPuuid(puuid string, count int) (*[]string, error) {
+func (mc *matchClient) GetMatchesByPuuid(puuid string, count int) (*[]string, *error) {
+	mc.log.Debugf("getting matches list(%d) of puuid %s", count, puuid)
 	body, err := mc.get(fmt.Sprintf("/matches/by-puuid/%s/ids?count=%d", puuid, count))
 	if err != nil {
 		return nil, err
 	}
 	defer body.Close()
 	res := &[]string{}
-	json.NewDecoder(body).Decode(res)
+	errDec := json.NewDecoder(body).Decode(res)
+	if errDec != nil {
+		mc.log.Errorf("error decoding matches list(%d) of puuid %s : %s", count, puuid, errDec.Error())
+		return nil, &error{ErrorDecode, errDec.Error()}
+	}
 	return res, nil
 }
 
-func (mc *matchClient) GetMatch(id string) (*Match, error) {
+func (mc *matchClient) GetMatch(id string) (*Match, *error) {
+	mc.log.Debugf("getting match %s", id)
 	body, err := mc.get(fmt.Sprintf("/matches/%s", id))
 	if err != nil {
+		mc.log.Errorf("error getting match %s : %s", id, err.Error())
 		return nil, err
 	}
 	defer body.Close()
 	res := &Match{}
-	json.NewDecoder(body).Decode(res)
+	errDec := json.NewDecoder(body).Decode(res)
+	if errDec != nil {
+		mc.log.Errorf("error decoding match %s : %s", id, errDec.Error())
+		return nil, &error{ErrorDecode, errDec.Error()}
+	}
 	return res, nil
 }
 
-func (mc *matchClient) get(url string) (io.ReadCloser, error) {
+func (mc *matchClient) get(url string) (io.ReadCloser, *error) {
 	return mc.c.Get(fmt.Sprintf("/match/v1%s", url))
 }
 

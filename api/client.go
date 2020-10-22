@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"os"
 	"strconv"
 	"time"
 )
@@ -15,35 +14,46 @@ const tokenHeader = "X-Riot-Token"
 
 type client struct {
 	c      *http.Client
-	region string
+	region region
 	apiKey string
+	log    logger
 }
 
-func NewClient(apikey string, region string) *client {
-	c := client{c: &http.Client{}, region: region, apiKey: apikey}
+func NewClient(apikey string, region region, log logger) *client {
+	log.Debug("initializing new http client")
+	c := client{c: &http.Client{}, region: region, apiKey: apikey, log: log}
 	return &c
 }
 
-func (c *client) Get(url string) (io.ReadCloser, error) {
+func (c *client) Get(url string) (io.ReadCloser, *error) {
 	request, _ := http.NewRequest("GET", fmt.Sprintf(URLFormat, c.region, url), nil)
+	c.log.Debug("getting " + request.URL.String())
 	request.Header.Add(tokenHeader, c.apiKey)
 	res, err := c.c.Do(request)
 	if err != nil {
-		return nil, err
+		c.log.Error("error getting "+request.URL.String(), err.Error())
+		return nil, &error{ErrorNetwork, err.Error()}
 	}
 	if res.StatusCode == http.StatusTooManyRequests {
 		retry := res.Header.Get("Retry-After")
 		seconds, _ := strconv.Atoi(retry)
-		fmt.Fprintf(os.Stdout, "rate limited, retrying in %ds\n", seconds)
+		c.log.Infof("rate limited, retrying in %ds\n", seconds)
 		time.Sleep(time.Duration(seconds) * time.Second)
 		return c.Get(url)
 	}
+
 	if res.StatusCode == http.StatusNotFound {
-		return nil, fmt.Errorf("ressource not found %s", url)
+		return nil, &error{ErrorNotFound, fmt.Sprintf("ressource not found %s", url)}
 	}
-	if res.StatusCode == http.StatusUnauthorized || res.StatusCode == http.StatusForbidden {
-		return nil, fmt.Errorf("unauthorized or forbidden, api key is probably wrong or expired")
+
+	if res.StatusCode == http.StatusUnauthorized {
+		return nil, &error{ErrorUnauthorized, "unauthorized, api key is missing"}
 	}
+
+	if res.StatusCode == http.StatusForbidden {
+		return nil, &error{ErrorUnauthorized, fmt.Sprintf("unauthorized, api key is wrong or expired : %s", c.apiKey)}
+	}
+
 	if res.StatusCode == http.StatusBadRequest {
 		var data struct {
 			Status struct {
@@ -52,7 +62,7 @@ func (c *client) Get(url string) (io.ReadCloser, error) {
 			} `json:"status"`
 		}
 		json.NewDecoder(res.Body).Decode(&data)
-		return nil, fmt.Errorf("%+v", data.Status.Message)
+		return nil, &error{ErrorUnauthorized, fmt.Sprintf("bad request, info from server : %+v", data)}
 	}
 	return res.Body, nil
 }

@@ -7,60 +7,83 @@ import (
 )
 
 type summonerClient struct {
-	c *client
+	c   *client
+	log logger
 }
 
-func NewSummonerClient(c *client) *summonerClient {
+func NewSummonerClient(c *client, log logger) *summonerClient {
+	log.Debug("initializing summoner client")
 	sc := &summonerClient{}
 	sc.c = c
+	sc.log = log
 	return sc
 }
 
-func (sc *summonerClient) GetByName(name string) (*Summoner, error) {
+func (sc *summonerClient) GetByName(name string) (*Summoner, *error) {
+	sc.log.Debugf("getting summoner by name %s", name)
 	body, err := sc.get(fmt.Sprintf("/summoners/by-name/%s", name))
 	if err != nil {
 		return nil, err
 	}
 	defer body.Close()
 	res := &Summoner{}
-	json.NewDecoder(body).Decode(res)
+	errDec := json.NewDecoder(body).Decode(res)
+	if errDec != nil {
+		sc.log.Errorf("error decoding summoner by name %s : %s", name, errDec.Error())
+		return nil, &error{ErrorDecode, errDec.Error()}
+	}
 	return res, nil
 }
 
-func (sc *summonerClient) GetByAccountId(accountId string) (*Summoner, error) {
+func (sc *summonerClient) GetByAccountId(accountId string) (*Summoner, *error) {
+	sc.log.Debugf("getting summoner by accountid %s", accountId)
 	body, err := sc.get(fmt.Sprintf("/summoners/by-account/%s", accountId))
 	if err != nil {
 		return nil, err
 	}
 	defer body.Close()
 	res := &Summoner{}
-	json.NewDecoder(body).Decode(res)
+	errDec := json.NewDecoder(body).Decode(res)
+	if errDec != nil {
+		sc.log.Errorf("error decoding summoner by accountid %s : %s", accountId, errDec.Error())
+		return nil, &error{ErrorDecode, errDec.Error()}
+	}
 	return res, nil
 }
 
-func (sc *summonerClient) GetByPuuid(puuid string) (*Summoner, error) {
+func (sc *summonerClient) GetByPuuid(puuid string) (*Summoner, *error) {
+	sc.log.Debugf("getting summoner by puuid %s", puuid)
 	body, err := sc.get(fmt.Sprintf("/summoners/by-puuid/%s", puuid))
 	if err != nil {
 		return nil, err
 	}
 	defer body.Close()
 	res := &Summoner{}
-	json.NewDecoder(body).Decode(res)
+	errDec := json.NewDecoder(body).Decode(res)
+	if errDec != nil {
+		sc.log.Errorf("error decoding summoner by puuid %s : %s", puuid, errDec.Error())
+		return nil, &error{ErrorDecode, errDec.Error()}
+	}
 	return res, nil
 }
 
-func (sc *summonerClient) GetById(id string) (*Summoner, error) {
+func (sc *summonerClient) GetById(id string) (*Summoner, *error) {
+	sc.log.Debugf("getting summoner by id %s", id)
 	body, err := sc.get(fmt.Sprintf("/summoners/%s", id))
 	if err != nil {
 		return nil, err
 	}
 	defer body.Close()
 	res := &Summoner{}
-	json.NewDecoder(body).Decode(res)
+	errDec := json.NewDecoder(body).Decode(res)
+	if errDec != nil {
+		sc.log.Errorf("error decoding summoner by id %s : %s", id, errDec.Error())
+		return nil, &error{ErrorDecode, errDec.Error()}
+	}
 	return res, nil
 }
 
-func (sc *summonerClient) get(url string) (io.ReadCloser, error) {
+func (sc *summonerClient) get(url string) (io.ReadCloser, *error) {
 	return sc.c.Get(fmt.Sprintf("/summoner/v1%s", url))
 }
 
