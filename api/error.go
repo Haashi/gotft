@@ -1,12 +1,12 @@
 package api
 
-type error struct {
-	code    int
-	message string
+type Error struct {
+	Code    int
+	Message string
 }
 
-func (err error) Error() string {
-	return err.message
+func (err Error) Error() string {
+	return err.Message
 }
 
 const (

@@ -25,33 +25,36 @@ func NewClient(apikey string, region region, log logger) *client {
 	return &c
 }
 
-func (c *client) Get(url string) (io.ReadCloser, *error) {
+func (c *client) Get(url string) (io.ReadCloser, *Error) {
 	request, _ := http.NewRequest("GET", fmt.Sprintf(URLFormat, c.region, url), nil)
 	c.log.Debug("getting " + request.URL.String())
 	request.Header.Add(tokenHeader, c.apiKey)
 	res, err := c.c.Do(request)
 	if err != nil {
 		c.log.Error("error getting "+request.URL.String(), err.Error())
-		return nil, &error{ErrorNetwork, err.Error()}
+		return nil, &Error{ErrorNetwork, err.Error()}
 	}
 	if res.StatusCode == http.StatusTooManyRequests {
 		retry := res.Header.Get("Retry-After")
 		seconds, _ := strconv.Atoi(retry)
-		c.log.Infof("rate limited, retrying in %ds\n", seconds)
+		c.log.Infof("rate limited, retrying in %ds", seconds)
 		time.Sleep(time.Duration(seconds) * time.Second)
 		return c.Get(url)
 	}
 
 	if res.StatusCode == http.StatusNotFound {
-		return nil, &error{ErrorNotFound, fmt.Sprintf("ressource not found %s", url)}
+		c.log.Errorf("ressource not found %s", url)
+		return nil, &Error{ErrorNotFound, fmt.Sprintf("ressource not found %s", request.URL.String())}
 	}
 
 	if res.StatusCode == http.StatusUnauthorized {
-		return nil, &error{ErrorUnauthorized, "unauthorized, api key is missing"}
+		c.log.Errorf("unauthorized, api key is wrong or missing")
+		return nil, &Error{ErrorUnauthorized, "unauthorized, api key is wrong or missing"}
 	}
 
 	if res.StatusCode == http.StatusForbidden {
-		return nil, &error{ErrorUnauthorized, fmt.Sprintf("unauthorized, api key is wrong or expired : %s", c.apiKey)}
+		c.log.Errorf("forbidden, api key is banned or path is wrong : %s", c.apiKey)
+		return nil, &Error{ErrorUnauthorized, fmt.Sprintf("forbidden, api key is banned or path is wrong : %s", c.apiKey)}
 	}
 
 	if res.StatusCode == http.StatusBadRequest {
@@ -62,7 +65,7 @@ func (c *client) Get(url string) (io.ReadCloser, *error) {
 			} `json:"status"`
 		}
 		json.NewDecoder(res.Body).Decode(&data)
-		return nil, &error{ErrorUnauthorized, fmt.Sprintf("bad request, info from server : %+v", data)}
+		return nil, &Error{ErrorUnauthorized, fmt.Sprintf("bad request, info from server : %+v", data)}
 	}
 	return res.Body, nil
 }

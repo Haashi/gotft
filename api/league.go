@@ -19,7 +19,7 @@ func NewLeagueClient(c *client, log logger) *leagueClient {
 	return le
 }
 
-func (le *leagueClient) GetMasterLeague() (*LeagueList, *error) {
+func (le *leagueClient) GetMasterLeague() (*LeagueList, *Error) {
 	le.log.Debug("getting master league")
 	body, err := le.get("/master")
 	if err != nil {
@@ -30,12 +30,12 @@ func (le *leagueClient) GetMasterLeague() (*LeagueList, *error) {
 	errDec := json.NewDecoder(body).Decode(res)
 	if errDec != nil {
 		le.log.Errorf("error decoding master league : %s", errDec.Error())
-		return nil, &error{ErrorDecode, errDec.Error()}
+		return nil, &Error{ErrorDecode, errDec.Error()}
 	}
 	return res, nil
 }
 
-func (le *leagueClient) GetGrandmasterLeague() (*LeagueList, *error) {
+func (le *leagueClient) GetGrandmasterLeague() (*LeagueList, *Error) {
 	le.log.Debug("getting grandmaster league")
 	body, err := le.get("/grandmaster")
 	if err != nil {
@@ -46,12 +46,12 @@ func (le *leagueClient) GetGrandmasterLeague() (*LeagueList, *error) {
 	errDec := json.NewDecoder(body).Decode(res)
 	if errDec != nil {
 		le.log.Errorf("error decoding grandmaster league : %s", errDec.Error())
-		return nil, &error{ErrorDecode, errDec.Error()}
+		return nil, &Error{ErrorDecode, errDec.Error()}
 	}
 	return res, nil
 }
 
-func (le *leagueClient) GetChallengerLeague() (*LeagueList, *error) {
+func (le *leagueClient) GetChallengerLeague() (*LeagueList, *Error) {
 	le.log.Debug("getting challenger league")
 	body, err := le.get("/challenger")
 	if err != nil {
@@ -62,12 +62,12 @@ func (le *leagueClient) GetChallengerLeague() (*LeagueList, *error) {
 	errDec := json.NewDecoder(body).Decode(res)
 	if errDec != nil {
 		le.log.Errorf("error decoding challenger league : %s", errDec.Error())
-		return nil, &error{ErrorDecode, errDec.Error()}
+		return nil, &Error{ErrorDecode, errDec.Error()}
 	}
 	return res, nil
 }
 
-func (le *leagueClient) GetBySummonerID(summonerId string) (*LeagueEntry, *error) {
+func (le *leagueClient) GetBySummonerID(summonerId string) (*LeagueEntry, *Error) {
 	le.log.Debugf("getting league of summonerid %s", summonerId)
 	body, err := le.get(fmt.Sprintf("/entries/by-summoner/%s", summonerId))
 	if err != nil {
@@ -78,12 +78,12 @@ func (le *leagueClient) GetBySummonerID(summonerId string) (*LeagueEntry, *error
 	errDec := json.NewDecoder(body).Decode(res)
 	if errDec != nil {
 		le.log.Errorf("error decoding league of summonerid %s : %s", summonerId, errDec.Error())
-		return nil, &error{ErrorDecode, errDec.Error()}
+		return nil, &Error{ErrorDecode, errDec.Error()}
 	}
 	return (*res)[0], nil
 }
 
-func (le *leagueClient) GetByTier(tier tier, division division, page int) (*[]*LeagueEntry, *error) {
+func (le *leagueClient) GetByTier(tier tier, division division, page int) (*[]*LeagueEntry, *Error) {
 	le.log.Debugf("getting %s%s leagues (page%d)", tier, division, page)
 	body, err := le.get(fmt.Sprintf("/entries/%s/%s?page=%d", tier, division, page))
 	if err != nil {
@@ -94,12 +94,12 @@ func (le *leagueClient) GetByTier(tier tier, division division, page int) (*[]*L
 	errDec := json.NewDecoder(body).Decode(res)
 	if errDec != nil {
 		le.log.Errorf("error decoding %s%s leagues (page%d) : %s", tier, division, page, errDec.Error())
-		return nil, &error{ErrorDecode, errDec.Error()}
+		return nil, &Error{ErrorDecode, errDec.Error()}
 	}
 	return res, nil
 }
 
-func (le *leagueClient) GetById(id string) (*LeagueList, *error) {
+func (le *leagueClient) GetById(id string) (*LeagueList, *Error) {
 	le.log.Debugf("getting league %s", id)
 	body, err := le.get(fmt.Sprintf("/leagues/%s", id))
 	if err != nil {
@@ -110,12 +110,12 @@ func (le *leagueClient) GetById(id string) (*LeagueList, *error) {
 	errDec := json.NewDecoder(body).Decode(res)
 	if errDec != nil {
 		le.log.Errorf("error decoding league %s : %s", id, errDec.Error())
-		return nil, &error{ErrorDecode, errDec.Error()}
+		return nil, &Error{ErrorDecode, errDec.Error()}
 	}
 	return res, nil
 }
 
-func (le *leagueClient) get(url string) (io.ReadCloser, *error) {
+func (le *leagueClient) get(url string) (io.ReadCloser, *Error) {
 	return le.c.Get(fmt.Sprintf("/league/v1%s", url))
 }
 
