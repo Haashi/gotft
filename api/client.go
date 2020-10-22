@@ -49,12 +49,12 @@ func (c *client) Get(url string) (io.ReadCloser, *Error) {
 
 	if res.StatusCode == http.StatusUnauthorized {
 		c.log.Errorf("unauthorized, api key is wrong or missing")
-		return nil, &Error{ErrorUnauthorized, "unauthorized, api key is wrong or missing"}
+		return nil, &Error{ErrorUnauthorized, fmt.Sprintf("unauthorized, api key is wrong or missing or ressouce is not found : %s / %s", c.apiKey, request.URL.String())}
 	}
 
 	if res.StatusCode == http.StatusForbidden {
 		c.log.Errorf("forbidden, api key is banned or path is wrong : %s", c.apiKey)
-		return nil, &Error{ErrorUnauthorized, fmt.Sprintf("forbidden, api key is banned or path is wrong : %s", c.apiKey)}
+		return nil, &Error{ErrorUnauthorized, fmt.Sprintf("forbidden, api key is banned or path is wrong : %s / %s", c.apiKey, request.URL.String())}
 	}
 
 	if res.StatusCode == http.StatusBadRequest {

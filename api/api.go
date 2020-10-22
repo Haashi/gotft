@@ -50,10 +50,9 @@ type Key struct {
 }
 
 func NewAPI(apikey string, region region, options ...Option) *API {
-	defaultLogger := logrus.New()
-	defaultLogger.SetLevel(logrus.ErrorLevel)
+
 	opt := &Options{
-		log: defaultLogger,
+		log: newDefaultLogger(region),
 	}
 	for _, option := range options {
 		option(opt)
@@ -66,4 +65,15 @@ func NewAPI(apikey string, region region, options ...Option) *API {
 	api.Match = NewMatchClient(continentClient, api.log)
 	api.Summoner = NewSummonerClient(baseClient, api.log)
 	return api
+}
+
+func newDefaultLogger(region region) logger {
+	defaultLogger := logrus.New()
+	defaultLogger.SetLevel(logrus.InfoLevel)
+	formatter := &logrus.TextFormatter{
+		FullTimestamp: true,
+	}
+	defaultLogger.SetFormatter(formatter)
+	entry := defaultLogger.WithField("region", region)
+	return entry
 }
