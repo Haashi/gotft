@@ -21,9 +21,9 @@ type apiclient struct {
 	log    internal.Logger
 }
 
-func newClient(apikey string, region region, opt *Options) *apiclient {
+func newClient(apiKey string, region region, opt *Options) *apiclient {
 	opt.log.Debug("initializing new http client")
-	apiC := apiclient{c: opt.c, region: region, apiKey: apikey, log: opt.log}
+	apiC := apiclient{c: opt.c, region: region, apiKey: apiKey, log: opt.log}
 	return &apiC
 }
 

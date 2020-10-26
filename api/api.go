@@ -41,12 +41,7 @@ type API struct {
 	Summoner *summonerClient
 }
 
-type Key struct {
-	Value string `json:"value"`
-	Prod  bool   `json:"prod"`
-}
-
-func New(apikey string, region region, options ...Option) *API {
+func New(apiKey string, region region, options ...Option) *API {
 	fields := map[string]interface{}{
 		"region": region,
 	}
@@ -58,8 +53,8 @@ func New(apikey string, region region, options ...Option) *API {
 		option(opt)
 	}
 	api := &API{}
-	baseClient := newClient(apikey, region, opt)
-	continentClient := newClient(apikey, regionToContinent[region], opt)
+	baseClient := newClient(apiKey, region, opt)
+	continentClient := newClient(apiKey, regionToContinent[region], opt)
 	api.League = newLeagueClient(baseClient, opt)
 	api.Match = newMatchClient(continentClient, opt)
 	api.Summoner = newSummonerClient(baseClient, opt)

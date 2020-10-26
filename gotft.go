@@ -16,7 +16,7 @@ type GoTFT struct {
 	RU  *api.API
 }
 
-func NewGOTFT(apikey string, options ...api.Option) *GoTFT {
+func New(apikey string, options ...api.Option) *GoTFT {
 	gotft := &GoTFT{}
 	gotft.BR = api.New(apikey, api.BR, options...)
 	gotft.EUN = api.New(apikey, api.EUN, options...)
