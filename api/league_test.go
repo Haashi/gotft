@@ -19,11 +19,11 @@ func Test_leagueClient_GetMasterLeague(t *testing.T) {
 }
 
 func Test_leagueClient_GetMasterLeague_Fail(t *testing.T) {
-	c := newClient("wrongapikey", EUW, testOpt)
+	c := newClient("RGAPI-a051aef9-0b01-4bc1-b7e0-fbf23eaafd1d", EUW, testOpt)
 	lc := newLeagueClient(c, testOpt)
 	_, err := lc.GetMasterLeague()
-	if _, ok := err.(ErrorUnauthorized); !ok {
-		t.Errorf("error missing or error is not a unauthorized error")
+	if _, ok := err.(ErrorForbidden); !ok {
+		t.Errorf("error missing or error is not a forbidden error")
 	}
 }
 
@@ -40,8 +40,8 @@ func Test_leagueClient_GetGrandmasterLeague_Fail(t *testing.T) {
 	c := newClient("wrongapikey", EUW, testOpt)
 	lc := newLeagueClient(c, testOpt)
 	_, err := lc.GetGrandmasterLeague()
-	if _, ok := err.(ErrorUnauthorized); !ok {
-		t.Errorf("error missing or error is not a unauthorized error")
+	if _, ok := err.(ErrorForbidden); !ok {
+		t.Errorf("error missing or error is not a forbidden error")
 	}
 }
 
@@ -58,8 +58,8 @@ func Test_leagueClient_GetChallengerLeague_Fail(t *testing.T) {
 	c := newClient("wrongapikey", EUW, testOpt)
 	lc := newLeagueClient(c, testOpt)
 	_, err := lc.GetChallengerLeague()
-	if _, ok := err.(ErrorUnauthorized); !ok {
-		t.Errorf("error missing or error is not a unauthorized error")
+	if _, ok := err.(ErrorForbidden); !ok {
+		t.Errorf("error missing or error is not a forbidden error")
 	}
 }
 
@@ -76,8 +76,8 @@ func Test_leagueClient_GetBySummonerID_Fail(t *testing.T) {
 	c := newClient(apiKey, EUW, testOpt)
 	lc := newLeagueClient(c, testOpt)
 	_, err := lc.GetBySummonerID("dQqsUTIsR-TiXeV2LHALb5nx6tlma4UTavOj3u6KQseatVs")
-	if _, ok := err.(ErrorUnauthorized); !ok {
-		t.Errorf("error missing or error is not a unauthorized error")
+	if _, ok := err.(ErrorBadRequest); !ok {
+		t.Errorf("error missing or error is not a badrequest error")
 	}
 }
 
@@ -94,8 +94,8 @@ func Test_leagueClient_GetByTier_Fail(t *testing.T) {
 	c := newClient(apiKey, EUW, testOpt)
 	lc := newLeagueClient(c, testOpt)
 	_, err := lc.GetByTier(TierGold, "VI", 1)
-	if _, ok := err.(ErrorUnauthorized); !ok {
-		t.Errorf("error missing or error is not a unauthorized error")
+	if _, ok := err.(ErrorBadRequest); !ok {
+		t.Errorf("error missing or error is not a badrequest error")
 	}
 }
 

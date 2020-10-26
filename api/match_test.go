@@ -22,8 +22,8 @@ func Test_matchClient_GetByPuuid_Fail(t *testing.T) {
 	c := newClient(apiKey, EUROPE, testOpt)
 	mc := newMatchClient(c, testOpt)
 	_, err := mc.GetMatchesByPuuid("6_QD37vWUa7Eq8jP6Cy-R18z60E9nRJlpkDZjqBGvtngedjANG6221udHyYnN2wCJCZV7CnlAqcnHQ", 10)
-	if _, ok := err.(ErrorUnauthorized); !ok {
-		t.Errorf("error missing or error is not a unauthorized error")
+	if _, ok := err.(ErrorBadRequest); !ok {
+		t.Errorf("error missing or error is not a badrequest error")
 	}
 }
 

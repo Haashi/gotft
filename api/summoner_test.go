@@ -22,8 +22,8 @@ func Test_summonerClient_GetByName_Fail(t *testing.T) {
 	c := newClient(apiKey, EUW, testOpt)
 	sc := newSummonerClient(c, testOpt)
 	_, err := sc.GetByName("Haashiiiiiiiiiiiii")
-	if _, ok := err.(ErrorUnauthorized); !ok {
-		t.Errorf("error missing or error is not a unauthorized error")
+	if _, ok := err.(ErrorNotFound); !ok {
+		t.Errorf("error missing or error is not a notfound error")
 	}
 }
 
@@ -40,8 +40,8 @@ func Test_summonerClient_GetByAccountId_Fail(t *testing.T) {
 	c := newClient(apiKey, EUW, testOpt)
 	sc := newSummonerClient(c, testOpt)
 	_, err := sc.GetByAccountId("BGtzAbSB_J3H2S2wYoDN51BRpJLHqyBx4vV7bJ8Yu14v8g")
-	if _, ok := err.(ErrorUnauthorized); !ok {
-		t.Errorf("error missing or error is not a unauthorized error")
+	if _, ok := err.(ErrorBadRequest); !ok {
+		t.Errorf("error missing or error is not a badrequest error")
 	}
 }
 
@@ -58,8 +58,8 @@ func Test_summonerClient_GetByPuuid_Fail(t *testing.T) {
 	c := newClient(apiKey, EUW, testOpt)
 	sc := newSummonerClient(c, testOpt)
 	_, err := sc.GetByPuuid("6_QD37vWUa7Eq8jP6Cy-R18z60E9nRJlpkDZjqBGvtngedjANG6221udHyYnN2wCJCZV7CnlAqcnHQ")
-	if _, ok := err.(ErrorUnauthorized); !ok {
-		t.Errorf("error missing or error is not a unauthorized error")
+	if _, ok := err.(ErrorBadRequest); !ok {
+		t.Errorf("error missing or error is not a badrequest error")
 	}
 }
 
@@ -76,7 +76,7 @@ func Test_summonerClient_GetById_Fail(t *testing.T) {
 	c := newClient(apiKey, EUW, testOpt)
 	sc := newSummonerClient(c, testOpt)
 	_, err := sc.GetById("dQqsUTIsR-TiXeV2LHALb5nx6tlma4UTavOj3u6KQseatVs")
-	if _, ok := err.(ErrorUnauthorized); !ok {
-		t.Errorf("error missing or error is not a unauthorized error")
+	if _, ok := err.(ErrorBadRequest); !ok {
+		t.Errorf("error missing or error is not a badrequest error")
 	}
 }

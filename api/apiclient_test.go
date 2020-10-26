@@ -32,17 +32,17 @@ func TestUnauthorizedInternal(t *testing.T) {
 	}
 }
 
-func TestUnauthorized(t *testing.T) {
-	c := newClient("thisisawrongapikey", EUROPE, testOpt)
-	_, err := c.get("/league/v1/master")
-	if _, ok := err.(ErrorUnauthorized); !ok {
-		t.Errorf("error missing or error is not a unauthorized error")
-	}
-}
-
 func TestForbiddenInternal(t *testing.T) {
 	c := newClient(apiKey, "badregion", &Options{c: &internal.ForbiddenClient{}, log: testOpt.log})
 	_, err := c.get("/")
+	if _, ok := err.(ErrorForbidden); !ok {
+		t.Errorf("error missing or error is not a forbidden error")
+	}
+}
+
+func TestForbidden(t *testing.T) {
+	c := newClient("thisisawrongapikey", EUROPE, testOpt)
+	_, err := c.get("/league/v1/master")
 	if _, ok := err.(ErrorForbidden); !ok {
 		t.Errorf("error missing or error is not a forbidden error")
 	}

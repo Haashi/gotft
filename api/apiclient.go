@@ -68,8 +68,12 @@ func (c *apiclient) get(url string) (io.ReadCloser, error) {
 		}
 		err := json.NewDecoder(res.Body).Decode(&data)
 		if err != nil {
+
+			c.log.Errorf("error decoding status bad request : %s", c.apiKey)
 			return nil, ErrorDecode{"status bad request", err.Error()}
 		}
+
+		c.log.Errorf("bad request on %s, info from server : %s", url, data.Status.Message)
 		return nil, ErrorBadRequest{url, data.Status.Message}
 	}
 	return res.Body, nil
