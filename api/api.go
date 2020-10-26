@@ -1,8 +1,6 @@
 package api
 
-import (
-	"github.com/sirupsen/logrus"
-)
+import "github.com/haashi/gotft/api/internal"
 
 type region string
 
@@ -41,7 +39,6 @@ type API struct {
 	League   *leagueClient
 	Match    *matchClient
 	Summoner *summonerClient
-	log      logger
 }
 
 type Key struct {
@@ -49,31 +46,22 @@ type Key struct {
 	Prod  bool   `json:"prod"`
 }
 
-func NewAPI(apikey string, region region, options ...Option) *API {
-
+func New(apikey string, region region, options ...Option) *API {
+	fields := map[string]interface{}{
+		"region": region,
+	}
 	opt := &Options{
-		log: newDefaultLogger(region),
+		log: internal.NewDefaultLogger(fields),
+		c:   internal.NewDefaultClient(),
 	}
 	for _, option := range options {
 		option(opt)
 	}
 	api := &API{}
-	api.log = opt.log
-	baseClient := NewClient(apikey, region, api.log)
-	continentClient := NewClient(apikey, regionToContinent[region], api.log)
-	api.League = NewLeagueClient(baseClient, api.log)
-	api.Match = NewMatchClient(continentClient, api.log)
-	api.Summoner = NewSummonerClient(baseClient, api.log)
+	baseClient := newClient(apikey, region, opt)
+	continentClient := newClient(apikey, regionToContinent[region], opt)
+	api.League = newLeagueClient(baseClient, opt)
+	api.Match = newMatchClient(continentClient, opt)
+	api.Summoner = newSummonerClient(baseClient, opt)
 	return api
-}
-
-func newDefaultLogger(region region) logger {
-	defaultLogger := logrus.New()
-	defaultLogger.SetLevel(logrus.InfoLevel)
-	formatter := &logrus.TextFormatter{
-		FullTimestamp: true,
-	}
-	defaultLogger.SetFormatter(formatter)
-	entry := defaultLogger.WithField("region", region)
-	return entry
 }

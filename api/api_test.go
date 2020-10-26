@@ -4,20 +4,21 @@ import (
 	"io/ioutil"
 	"testing"
 
+	"github.com/haashi/gotft/api/internal"
 	"github.com/sirupsen/logrus"
 )
 
 var apiKey string
-var log logger
+var testOpt *Options
 
 func init() {
 	file, _ := ioutil.ReadFile("../apikey")
 	apiKey = string(file)
 	testLogger := logrus.New()
 	testLogger.SetLevel(logrus.DebugLevel)
-	log = testLogger
+	testOpt = &Options{log: testLogger, c: internal.NewDefaultClient()}
 }
 
 func TestNewAPI(t *testing.T) {
-	_ = NewAPI(apiKey, EUW)
+	_ = New(apiKey, EUW)
 }
