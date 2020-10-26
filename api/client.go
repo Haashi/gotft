@@ -64,7 +64,10 @@ func (c *client) Get(url string) (io.ReadCloser, *Error) {
 				StatusCode int    `json:"status_code"`
 			} `json:"status"`
 		}
-		json.NewDecoder(res.Body).Decode(&data)
+		err := json.NewDecoder(res.Body).Decode(&data)
+		if err != nil {
+			return nil, &Error{Code: ErrorUnauthorized, Message: fmt.Sprintf("error decoding status bad request message on %s", request.URL.String())}
+		}
 		return nil, &Error{ErrorUnauthorized, fmt.Sprintf("bad request, info from server : %+v", data)}
 	}
 	return res.Body, nil

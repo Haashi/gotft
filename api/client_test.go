@@ -35,7 +35,10 @@ func TestTooManyRequest(t *testing.T) {
 	for i := 0; i < 22; i++ {
 		wg.Add(1)
 		go func() {
-			c.Get("/league/v1/master")
+			_, err := c.Get("/league/v1/master")
+			if err != nil {
+				t.Errorf("failed to get league/v1/master")
+			}
 			wg.Done()
 		}()
 	}
