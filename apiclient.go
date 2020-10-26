@@ -1,4 +1,4 @@
-package api
+package gotft
 
 import (
 	"encoding/json"
@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/haashi/gotft/api/internal"
+	"github.com/haashi/gotft/internal"
 )
 
 const URLFormat = "https://%s.api.riotgames.com/tft%s"

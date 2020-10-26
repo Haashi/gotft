@@ -1,11 +1,11 @@
-package api
+package gotft
 
 import (
 	"encoding/json"
 	"fmt"
 	"io"
 
-	"github.com/haashi/gotft/api/internal"
+	"github.com/haashi/gotft/internal"
 )
 
 type leagueClient struct {

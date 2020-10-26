@@ -1,6 +1,6 @@
-package api
+package gotft
 
-import "github.com/haashi/gotft/api/internal"
+import "github.com/haashi/gotft/internal"
 
 type region string
 
@@ -35,13 +35,13 @@ var regionToContinent = map[region]region{
 	TR:  EUROPE,
 }
 
-type API struct {
+type api struct {
 	League   *leagueClient
 	Match    *matchClient
 	Summoner *summonerClient
 }
 
-func New(apiKey string, region region, options ...Option) *API {
+func newAPI(apiKey string, region region, options ...Option) *api {
 	fields := map[string]interface{}{
 		"region": region,
 	}
@@ -52,7 +52,7 @@ func New(apiKey string, region region, options ...Option) *API {
 	for _, option := range options {
 		option(opt)
 	}
-	api := &API{}
+	api := &api{}
 	baseClient := newClient(apiKey, region, opt)
 	continentClient := newClient(apiKey, regionToContinent[region], opt)
 	api.League = newLeagueClient(baseClient, opt)

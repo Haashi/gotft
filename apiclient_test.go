@@ -1,11 +1,11 @@
-package api
+package gotft
 
 import (
 	"sync"
 	"testing"
 	"time"
 
-	"github.com/haashi/gotft/api/internal"
+	"github.com/haashi/gotft/internal"
 )
 
 func TestNoInternetInternal(t *testing.T) {

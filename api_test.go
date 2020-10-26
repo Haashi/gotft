@@ -1,10 +1,10 @@
-package api
+package gotft
 
 import (
 	"io/ioutil"
 	"testing"
 
-	"github.com/haashi/gotft/api/internal"
+	"github.com/haashi/gotft/internal"
 	"github.com/sirupsen/logrus"
 )
 
@@ -20,5 +20,5 @@ func init() {
 }
 
 func TestNewAPI(t *testing.T) {
-	_ = New(apiKey, EUW)
+	_ = newAPI(apiKey, EUW)
 }
