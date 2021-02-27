@@ -1,9 +1,9 @@
-package api
+package gotft
 
 import (
 	"testing"
 
-	"github.com/haashi/gotft/api/internal"
+	"github.com/haashi/gotft/internal"
 	"github.com/sirupsen/logrus"
 )
 
@@ -18,5 +18,5 @@ func init() {
 }
 
 func TestNewAPI(t *testing.T) {
-	_ = New(apiKey, EUW, WithClient(internal.NewDefaultClient()), WithLog(logrus.New()))
+	_ = New(apiKey, WithClient(internal.NewDefaultClient()), WithLog(logrus.New()))
 }

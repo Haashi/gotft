@@ -1,6 +1,6 @@
-package api
+package gotft
 
-import "github.com/haashi/gotft/api/internal"
+import "github.com/haashi/gotft/internal"
 
 type Options struct {
 	log internal.Logger
