@@ -25,14 +25,16 @@ func (mc *matchClient) GetMatchesByPuuid(puuid string, count int) (*[]string, er
 	mc.log.Debugf("getting matches list(%d) of puuid %s", count, puuid)
 	body, err := mc.get(fmt.Sprintf("/matches/by-puuid/%s/ids?count=%d", puuid, count))
 	if err != nil {
+		mc.log.Errorf("error getting matches list(%d) of puuid %d : %s", count, puuid, err.Error())
 		return nil, err
 	}
 	defer body.Close()
 	res := &[]string{}
 	errDec := json.NewDecoder(body).Decode(res)
 	if errDec != nil {
-		mc.log.Errorf("error decoding matches list(%d) of puuid %s : %s", count, puuid, errDec.Error())
-		return nil, ErrorDecode{fmt.Sprintf("matches list(%d) of puuid %s", count, puuid), errDec.Error()}
+		err := ErrorDecode{fmt.Sprintf("matches list(%d) of puuid %s", count, puuid), errDec.Error()}
+		mc.log.Errorf(err.Error())
+		return nil, err
 	}
 	return res, nil
 }
@@ -48,8 +50,9 @@ func (mc *matchClient) GetMatch(id string) (*Match, error) {
 	res := &Match{}
 	errDec := json.NewDecoder(body).Decode(res)
 	if errDec != nil {
-		mc.log.Errorf("error decoding match %s : %s", id, errDec.Error())
-		return nil, ErrorDecode{fmt.Sprintf("match %s", id), errDec.Error()}
+		err := ErrorDecode{fmt.Sprintf("match %s", id), errDec.Error()}
+		mc.log.Errorf(err.Error())
+		return nil, err
 	}
 	return res, nil
 }
@@ -113,4 +116,5 @@ type Unit struct {
 	Name        string `json:"name" bson:"name"`
 	Rarity      int    `json:"rarity" bson:"rarity"`
 	Tier        int    `json:"tier" bson:"tier"`
+	Chosen      string `json:"chosen" bson:"chosen"`
 }

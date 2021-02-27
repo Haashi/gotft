@@ -25,14 +25,16 @@ func (le *leagueClient) GetMasterLeague() (*LeagueList, error) {
 	le.log.Debug("getting master league")
 	body, err := le.get("/master")
 	if err != nil {
+		le.log.Errorf("error getting master league : %s", err.Error())
 		return nil, err
 	}
 	defer body.Close()
 	res := &LeagueList{}
 	errDec := json.NewDecoder(body).Decode(res)
 	if errDec != nil {
-		le.log.Errorf("error decoding master league : %s", errDec.Error())
-		return nil, ErrorDecode{"master league", errDec.Error()}
+		err := ErrorDecode{"master league", errDec.Error()}
+		le.log.Errorf(err.Error())
+		return nil, err
 	}
 	return res, nil
 }
@@ -41,14 +43,16 @@ func (le *leagueClient) GetGrandmasterLeague() (*LeagueList, error) {
 	le.log.Debug("getting grandmaster league")
 	body, err := le.get("/grandmaster")
 	if err != nil {
+		le.log.Errorf("error getting grandmaster league : %s", err.Error())
 		return nil, err
 	}
 	defer body.Close()
 	res := &LeagueList{}
 	errDec := json.NewDecoder(body).Decode(res)
 	if errDec != nil {
-		le.log.Errorf("error decoding grandmaster league : %s", errDec.Error())
-		return nil, ErrorDecode{"grandmaster league", errDec.Error()}
+		err := ErrorDecode{"grandmaster league", errDec.Error()}
+		le.log.Errorf(err.Error())
+		return nil, err
 	}
 	return res, nil
 }
@@ -57,14 +61,16 @@ func (le *leagueClient) GetChallengerLeague() (*LeagueList, error) {
 	le.log.Debug("getting challenger league")
 	body, err := le.get("/challenger")
 	if err != nil {
+		le.log.Errorf("error getting challenger league : %s", err.Error())
 		return nil, err
 	}
 	defer body.Close()
 	res := &LeagueList{}
 	errDec := json.NewDecoder(body).Decode(res)
 	if errDec != nil {
-		le.log.Errorf("error decoding challenger league : %s", errDec.Error())
-		return nil, ErrorDecode{"challenger league", errDec.Error()}
+		err := ErrorDecode{"challenger league", errDec.Error()}
+		le.log.Errorf(err.Error())
+		return nil, err
 	}
 	return res, nil
 }
@@ -73,14 +79,16 @@ func (le *leagueClient) GetBySummonerID(summonerId string) (*LeagueEntry, error)
 	le.log.Debugf("getting league of summonerid %s", summonerId)
 	body, err := le.get(fmt.Sprintf("/entries/by-summoner/%s", summonerId))
 	if err != nil {
+		le.log.Errorf("error getting league league of summonerid %s : %s", summonerId, err.Error())
 		return nil, err
 	}
 	defer body.Close()
 	res := &[]*LeagueEntry{}
 	errDec := json.NewDecoder(body).Decode(res)
 	if errDec != nil {
-		le.log.Errorf("error decoding league of summonerid %s : %s", summonerId, errDec.Error())
-		return nil, ErrorDecode{fmt.Sprintf("league of summonerid %s", summonerId), errDec.Error()}
+		err := ErrorDecode{fmt.Sprintf("league of summonerid %s", summonerId), errDec.Error()}
+		le.log.Errorf(err.Error())
+		return nil, err
 	}
 	return (*res)[0], nil
 }
@@ -89,14 +97,16 @@ func (le *leagueClient) GetByTier(tier tier, division division, page int) (*[]*L
 	le.log.Debugf("getting %s%s leagues (page%d)", tier, division, page)
 	body, err := le.get(fmt.Sprintf("/entries/%s/%s?page=%d", tier, division, page))
 	if err != nil {
+		le.log.Errorf("error getting %s%s leagues (page%d) : %s", tier, division, page, err.Error())
 		return nil, err
 	}
 	defer body.Close()
 	res := &[]*LeagueEntry{}
 	errDec := json.NewDecoder(body).Decode(res)
 	if errDec != nil {
-		le.log.Errorf("error decoding %s%s leagues (page%d) : %s", tier, division, page, errDec.Error())
-		return nil, ErrorDecode{fmt.Sprintf("%s%s leagues (page%d)", tier, division, page), errDec.Error()}
+		err := ErrorDecode{fmt.Sprintf("%s%s leagues (page%d)", tier, division, page), errDec.Error()}
+		le.log.Errorf(err.Error())
+		return nil, err
 	}
 	return res, nil
 }
@@ -105,14 +115,16 @@ func (le *leagueClient) GetById(id string) (*LeagueList, error) {
 	le.log.Debugf("getting league %s", id)
 	body, err := le.get(fmt.Sprintf("/leagues/%s", id))
 	if err != nil {
+		le.log.Errorf("error getting league %s : %s", id, err.Error())
 		return nil, err
 	}
 	defer body.Close()
 	res := &LeagueList{}
 	errDec := json.NewDecoder(body).Decode(res)
 	if errDec != nil {
-		le.log.Errorf("error decoding league %s : %s", id, errDec.Error())
-		return nil, ErrorDecode{fmt.Sprintf("league %s", id), errDec.Error()}
+		err := ErrorDecode{fmt.Sprintf("league %s", id), errDec.Error()}
+		le.log.Errorf(err.Error())
+		return nil, err
 	}
 	return res, nil
 }

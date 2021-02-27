@@ -2,6 +2,8 @@ package api
 
 import (
 	"testing"
+
+	"github.com/haashi/gotft/api/internal"
 )
 
 func TestNewMatchClient(t *testing.T) {
@@ -10,37 +12,55 @@ func TestNewMatchClient(t *testing.T) {
 }
 
 func Test_matchClient_GetByPuuid(t *testing.T) {
-	c := newClient(apiKey, EUROPE, testOpt)
+	c := newClient(apiKey, EUROPE, &Options{c: &internal.StringListClient{}, log: testOpt.log})
 	mc := newMatchClient(c, testOpt)
-	_, err := mc.GetMatchesByPuuid("5_QD37vWUa7Eq8jP6Cy-R18z60E9nRJlpkDZjqBGvtngedjANG6221udHyYnN2wCJCZV7CnlAqcnHQ", 10)
+	_, err := mc.GetMatchesByPuuid("puuid", 10)
 	if err != nil {
 		t.Errorf(err.Error())
 	}
 }
 
 func Test_matchClient_GetByPuuid_Fail(t *testing.T) {
-	c := newClient(apiKey, EUROPE, testOpt)
+	c := newClient(apiKey, EUROPE, &Options{c: &internal.NotFoundClient{}, log: testOpt.log})
 	mc := newMatchClient(c, testOpt)
-	_, err := mc.GetMatchesByPuuid("6_QD37vWUa7Eq8jP6Cy-R18z60E9nRJlpkDZjqBGvtngedjANG6221udHyYnN2wCJCZV7CnlAqcnHQ", 10)
-	if _, ok := err.(ErrorBadRequest); !ok {
-		t.Errorf("error missing or error is not a badrequest error")
+	_, err := mc.GetMatchesByPuuid("puuid", 10)
+	if err == nil {
+		t.Errorf("error missing")
+	}
+}
+
+func Test_matchClient_GetByPuuid_Decode(t *testing.T) {
+	c := newClient(apiKey, EUROPE, &Options{c: &internal.BadDecodeClient{}, log: testOpt.log})
+	mc := newMatchClient(c, testOpt)
+	_, err := mc.GetMatchesByPuuid("puuid", 10)
+	if err == nil {
+		t.Errorf("error missing")
 	}
 }
 
 func Test_matchClient_GetMatch(t *testing.T) {
-	c := newClient(apiKey, EUROPE, testOpt)
+	c := newClient(apiKey, EUROPE, &Options{c: &internal.MatchClient{}, log: testOpt.log})
 	mc := newMatchClient(c, testOpt)
-	_, err := mc.GetMatch("EUW1_4770230362")
+	_, err := mc.GetMatch("matchID")
 	if err != nil {
 		t.Errorf(err.Error())
 	}
 }
 
 func Test_matchClient_GetMatch_Fail(t *testing.T) {
-	c := newClient(apiKey, EUROPE, testOpt)
+	c := newClient(apiKey, EUROPE, &Options{c: &internal.NotFoundClient{}, log: testOpt.log})
 	mc := newMatchClient(c, testOpt)
-	_, err := mc.GetMatch("EUW1_4750230362")
-	if _, ok := err.(ErrorNotFound); !ok {
-		t.Errorf("error missing or error is not a notfound error")
+	_, err := mc.GetMatch("matchID")
+	if err == nil {
+		t.Errorf("error missing")
+	}
+}
+
+func Test_matchClient_GetMatch_Decode(t *testing.T) {
+	c := newClient(apiKey, EUROPE, &Options{c: &internal.BadDecodeClient{}, log: testOpt.log})
+	mc := newMatchClient(c, testOpt)
+	_, err := mc.GetMatch("matchID")
+	if err == nil {
+		t.Errorf("error missing")
 	}
 }

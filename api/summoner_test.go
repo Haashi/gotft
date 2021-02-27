@@ -2,6 +2,8 @@ package api
 
 import (
 	"testing"
+
+	"github.com/haashi/gotft/api/internal"
 )
 
 func TestNewSummonerClient(t *testing.T) {
@@ -10,73 +12,109 @@ func TestNewSummonerClient(t *testing.T) {
 }
 
 func Test_summonerClient_GetByName(t *testing.T) {
-	c := newClient(apiKey, EUW, testOpt)
+	c := newClient(apiKey, EUW, &Options{c: &internal.SummonerClient{}, log: testOpt.log})
 	sc := newSummonerClient(c, testOpt)
-	_, err := sc.GetByName("Haashi")
+	_, err := sc.GetByName("name")
 	if err != nil {
 		t.Errorf(err.Error())
 	}
 }
 
 func Test_summonerClient_GetByName_Fail(t *testing.T) {
-	c := newClient(apiKey, EUW, testOpt)
+	c := newClient(apiKey, EUW, &Options{c: &internal.NotFoundClient{}, log: testOpt.log})
 	sc := newSummonerClient(c, testOpt)
-	_, err := sc.GetByName("Haashiiiiiiiiiiiii")
-	if _, ok := err.(ErrorNotFound); !ok {
-		t.Errorf("error missing or error is not a notfound error")
+	_, err := sc.GetByName("name")
+	if err == nil {
+		t.Errorf("error missing")
+	}
+}
+
+func Test_summonerClient_GetByName_Decode(t *testing.T) {
+	c := newClient(apiKey, EUW, &Options{c: &internal.BadDecodeClient{}, log: testOpt.log})
+	sc := newSummonerClient(c, testOpt)
+	_, err := sc.GetByName("name")
+	if err == nil {
+		t.Errorf("error missing")
 	}
 }
 
 func Test_summonerClient_GetByAccountId(t *testing.T) {
-	c := newClient(apiKey, EUW, testOpt)
+	c := newClient(apiKey, EUW, &Options{c: &internal.SummonerClient{}, log: testOpt.log})
 	sc := newSummonerClient(c, testOpt)
-	_, err := sc.GetByAccountId("KGtzAbSB_J3H2S2wYoDN51BRpJLHqyBx4vV7bJ8Yu14v8g")
+	_, err := sc.GetByAccountId("accountid")
 	if err != nil {
 		t.Errorf(err.Error())
 	}
 }
 
 func Test_summonerClient_GetByAccountId_Fail(t *testing.T) {
-	c := newClient(apiKey, EUW, testOpt)
+	c := newClient(apiKey, EUW, &Options{c: &internal.NotFoundClient{}, log: testOpt.log})
 	sc := newSummonerClient(c, testOpt)
-	_, err := sc.GetByAccountId("BGtzAbSB_J3H2S2wYoDN51BRpJLHqyBx4vV7bJ8Yu14v8g")
-	if _, ok := err.(ErrorBadRequest); !ok {
-		t.Errorf("error missing or error is not a badrequest error")
+	_, err := sc.GetByAccountId("accountid")
+	if err == nil {
+		t.Errorf("error missing")
+	}
+}
+
+func Test_summonerClient_GetByAccountId_Decode(t *testing.T) {
+	c := newClient(apiKey, EUW, &Options{c: &internal.BadDecodeClient{}, log: testOpt.log})
+	sc := newSummonerClient(c, testOpt)
+	_, err := sc.GetByAccountId("accountid")
+	if err == nil {
+		t.Errorf("error missing")
 	}
 }
 
 func Test_summonerClient_GetByPuuid(t *testing.T) {
-	c := newClient(apiKey, EUW, testOpt)
+	c := newClient(apiKey, EUW, &Options{c: &internal.SummonerClient{}, log: testOpt.log})
 	sc := newSummonerClient(c, testOpt)
-	_, err := sc.GetByPuuid("5_QD37vWUa7Eq8jP6Cy-R18z60E9nRJlpkDZjqBGvtngedjANG6221udHyYnN2wCJCZV7CnlAqcnHQ")
+	_, err := sc.GetByPuuid("puuid")
 	if err != nil {
 		t.Errorf(err.Error())
 	}
 }
 
 func Test_summonerClient_GetByPuuid_Fail(t *testing.T) {
-	c := newClient(apiKey, EUW, testOpt)
+	c := newClient(apiKey, EUW, &Options{c: &internal.NotFoundClient{}, log: testOpt.log})
 	sc := newSummonerClient(c, testOpt)
-	_, err := sc.GetByPuuid("6_QD37vWUa7Eq8jP6Cy-R18z60E9nRJlpkDZjqBGvtngedjANG6221udHyYnN2wCJCZV7CnlAqcnHQ")
-	if _, ok := err.(ErrorBadRequest); !ok {
-		t.Errorf("error missing or error is not a badrequest error")
+	_, err := sc.GetByPuuid("puuid")
+	if err == nil {
+		t.Errorf("error missing")
+	}
+}
+
+func Test_summonerClient_GetByPuuid_Decode(t *testing.T) {
+	c := newClient(apiKey, EUW, &Options{c: &internal.BadDecodeClient{}, log: testOpt.log})
+	sc := newSummonerClient(c, testOpt)
+	_, err := sc.GetByPuuid("puuid")
+	if err == nil {
+		t.Errorf("error missing")
 	}
 }
 
 func Test_summonerClient_GetById(t *testing.T) {
-	c := newClient(apiKey, EUW, testOpt)
+	c := newClient(apiKey, EUW, &Options{c: &internal.SummonerClient{}, log: testOpt.log})
 	sc := newSummonerClient(c, testOpt)
-	_, err := sc.GetById("cQqsUTIsR-TiXeV2LHALb5nx6tlma4UTavOj3u6KQseatVs")
+	_, err := sc.GetById("id")
 	if err != nil {
 		t.Errorf(err.Error())
 	}
 }
 
 func Test_summonerClient_GetById_Fail(t *testing.T) {
-	c := newClient(apiKey, EUW, testOpt)
+	c := newClient(apiKey, EUW, &Options{c: &internal.NotFoundClient{}, log: testOpt.log})
 	sc := newSummonerClient(c, testOpt)
-	_, err := sc.GetById("dQqsUTIsR-TiXeV2LHALb5nx6tlma4UTavOj3u6KQseatVs")
-	if _, ok := err.(ErrorBadRequest); !ok {
-		t.Errorf("error missing or error is not a badrequest error")
+	_, err := sc.GetById("id")
+	if err == nil {
+		t.Errorf("error missing")
+	}
+}
+
+func Test_summonerClient_GetById_Decode(t *testing.T) {
+	c := newClient(apiKey, EUW, &Options{c: &internal.BadDecodeClient{}, log: testOpt.log})
+	sc := newSummonerClient(c, testOpt)
+	_, err := sc.GetById("id")
+	if err == nil {
+		t.Errorf("error missing")
 	}
 }

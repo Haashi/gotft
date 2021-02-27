@@ -2,4 +2,6 @@ module github.com/haashi/gotft
 
 go 1.15
 
-require github.com/sirupsen/logrus v1.7.0
+require (
+	github.com/sirupsen/logrus v1.8.0
+)

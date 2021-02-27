@@ -25,14 +25,16 @@ func (sc *summonerClient) GetByName(name string) (*Summoner, error) {
 	sc.log.Debugf("getting summoner by name %s", name)
 	body, err := sc.get(fmt.Sprintf("/summoners/by-name/%s", name))
 	if err != nil {
+		sc.log.Errorf("error getting summoner by name %s : %s", name, err.Error())
 		return nil, err
 	}
 	defer body.Close()
 	res := &Summoner{}
 	errDec := json.NewDecoder(body).Decode(res)
 	if errDec != nil {
-		sc.log.Errorf("error decoding summoner by name %s : %s", name, errDec.Error())
-		return nil, ErrorDecode{fmt.Sprintf("summoner by name %s", name), errDec.Error()}
+		err := ErrorDecode{fmt.Sprintf("summoner by name %s", name), errDec.Error()}
+		sc.log.Errorf(err.Error())
+		return nil, err
 	}
 	return res, nil
 }
@@ -41,14 +43,16 @@ func (sc *summonerClient) GetByAccountId(accountId string) (*Summoner, error) {
 	sc.log.Debugf("getting summoner by accountid %s", accountId)
 	body, err := sc.get(fmt.Sprintf("/summoners/by-account/%s", accountId))
 	if err != nil {
+		sc.log.Errorf("error getting summoner by accountid %s : %s", accountId, err.Error())
 		return nil, err
 	}
 	defer body.Close()
 	res := &Summoner{}
 	errDec := json.NewDecoder(body).Decode(res)
 	if errDec != nil {
-		sc.log.Errorf("error decoding summoner by accountid %s : %s", accountId, errDec.Error())
-		return nil, ErrorDecode{fmt.Sprintf("summoner by accountid %s", accountId), errDec.Error()}
+		err := ErrorDecode{fmt.Sprintf("summoner by accountid %s", accountId), errDec.Error()}
+		sc.log.Errorf(err.Error())
+		return nil, err
 	}
 	return res, nil
 }
@@ -57,14 +61,16 @@ func (sc *summonerClient) GetByPuuid(puuid string) (*Summoner, error) {
 	sc.log.Debugf("getting summoner by puuid %s", puuid)
 	body, err := sc.get(fmt.Sprintf("/summoners/by-puuid/%s", puuid))
 	if err != nil {
+		sc.log.Errorf("error getting summoner by puuid %s : %s", puuid, err.Error())
 		return nil, err
 	}
 	defer body.Close()
 	res := &Summoner{}
 	errDec := json.NewDecoder(body).Decode(res)
 	if errDec != nil {
-		sc.log.Errorf("error decoding summoner by puuid %s : %s", puuid, errDec.Error())
-		return nil, ErrorDecode{fmt.Sprintf("summoner by puuid %s", puuid), errDec.Error()}
+		err := ErrorDecode{fmt.Sprintf("summoner by puuid %s", puuid), errDec.Error()}
+		sc.log.Errorf(err.Error())
+		return nil, err
 	}
 	return res, nil
 }
@@ -73,14 +79,16 @@ func (sc *summonerClient) GetById(id string) (*Summoner, error) {
 	sc.log.Debugf("getting summoner by id %s", id)
 	body, err := sc.get(fmt.Sprintf("/summoners/%s", id))
 	if err != nil {
+		sc.log.Errorf("error getting summoner by id %s : %s", id, err.Error())
 		return nil, err
 	}
 	defer body.Close()
 	res := &Summoner{}
 	errDec := json.NewDecoder(body).Decode(res)
 	if errDec != nil {
-		sc.log.Errorf("error decoding summoner by id %s : %s", id, errDec.Error())
-		return nil, ErrorDecode{fmt.Sprintf("summoner  by id %s", id), errDec.Error()}
+		err := ErrorDecode{fmt.Sprintf("summoner  by id %s", id), errDec.Error()}
+		sc.log.Errorf(err.Error())
+		return nil, err
 	}
 	return res, nil
 }
