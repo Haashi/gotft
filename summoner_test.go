@@ -3,7 +3,7 @@ package gotft
 import (
 	"testing"
 
-	"github.com/haashi/gotft/api/internal"
+	"github.com/haashi/gotft/internal"
 )
 
 func TestNewSummonerClient(t *testing.T) {
