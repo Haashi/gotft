@@ -21,8 +21,8 @@ func newMatchClient(c *apiclient, opt *Options) *matchClient {
 	return mc
 }
 
-func (mc *matchClient) GetMatchesByPuuid(puuid string, count int) (*[]string, error) {
-	mc.log.Debugf("getting matches list(%d) of puuid %s", count, puuid)
+func (mc *matchClient) GetMatchesByPuuid(puuid string, count int) ([]string, error) {
+	mc.log.Infof("getting matches list(%d) of puuid %s", count, puuid)
 	body, err := mc.get(fmt.Sprintf("/matches/by-puuid/%s/ids?count=%d", puuid, count))
 	if err != nil {
 		mc.log.Errorf("error getting matches list(%d) of puuid %d : %s", count, puuid, err.Error())
@@ -36,11 +36,11 @@ func (mc *matchClient) GetMatchesByPuuid(puuid string, count int) (*[]string, er
 		mc.log.Errorf(err.Error())
 		return nil, err
 	}
-	return res, nil
+	return *res, nil
 }
 
 func (mc *matchClient) GetMatch(id string) (*Match, error) {
-	mc.log.Debugf("getting match %s", id)
+	mc.log.Infof("getting match %s", id)
 	body, err := mc.get(fmt.Sprintf("/matches/%s", id))
 	if err != nil {
 		mc.log.Errorf("error getting match %s : %s", id, err.Error())
@@ -78,7 +78,7 @@ type Info struct {
 	GameVariation string        `json:"game_variation" bson:"game_variation"`
 	GameVersion   string        `json:"game_version" bson:"game_version"`
 	Participants  []Participant `json:"participants" bson:"participants"`
-	QueueId       int           `json:"queue_id" bson:"queue_id"`
+	QueueId       queueId       `json:"queue_id" bson:"queue_id"`
 	TftSetNumber  int           `json:"tft_set_number" bson:"tft_set_number"`
 }
 

@@ -22,7 +22,7 @@ func newSummonerClient(c *apiclient, opt *Options) *summonerClient {
 }
 
 func (sc *summonerClient) GetByName(name string) (*Summoner, error) {
-	sc.log.Debugf("getting summoner by name %s", name)
+	sc.log.Infof("getting summoner by name %s", name)
 	body, err := sc.get(fmt.Sprintf("/summoners/by-name/%s", name))
 	if err != nil {
 		sc.log.Errorf("error getting summoner by name %s : %s", name, err.Error())
@@ -40,7 +40,7 @@ func (sc *summonerClient) GetByName(name string) (*Summoner, error) {
 }
 
 func (sc *summonerClient) GetByAccountId(accountId string) (*Summoner, error) {
-	sc.log.Debugf("getting summoner by accountid %s", accountId)
+	sc.log.Infof("getting summoner by accountid %s", accountId)
 	body, err := sc.get(fmt.Sprintf("/summoners/by-account/%s", accountId))
 	if err != nil {
 		sc.log.Errorf("error getting summoner by accountid %s : %s", accountId, err.Error())
@@ -58,7 +58,7 @@ func (sc *summonerClient) GetByAccountId(accountId string) (*Summoner, error) {
 }
 
 func (sc *summonerClient) GetByPuuid(puuid string) (*Summoner, error) {
-	sc.log.Debugf("getting summoner by puuid %s", puuid)
+	sc.log.Infof("getting summoner by puuid %s", puuid)
 	body, err := sc.get(fmt.Sprintf("/summoners/by-puuid/%s", puuid))
 	if err != nil {
 		sc.log.Errorf("error getting summoner by puuid %s : %s", puuid, err.Error())
@@ -76,7 +76,7 @@ func (sc *summonerClient) GetByPuuid(puuid string) (*Summoner, error) {
 }
 
 func (sc *summonerClient) GetById(id string) (*Summoner, error) {
-	sc.log.Debugf("getting summoner by id %s", id)
+	sc.log.Infof("getting summoner by id %s", id)
 	body, err := sc.get(fmt.Sprintf("/summoners/%s", id))
 	if err != nil {
 		sc.log.Errorf("error getting summoner by id %s : %s", id, err.Error())

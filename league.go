@@ -76,7 +76,7 @@ func (le *leagueClient) GetChallengerLeague() (*LeagueList, error) {
 }
 
 func (le *leagueClient) GetBySummonerID(summonerId string) (*LeagueEntry, error) {
-	le.log.Debugf("getting league of summonerid %s", summonerId)
+	le.log.Infof("getting league of summonerid %s", summonerId)
 	body, err := le.get(fmt.Sprintf("/entries/by-summoner/%s", summonerId))
 	if err != nil {
 		le.log.Errorf("error getting league league of summonerid %s : %s", summonerId, err.Error())
@@ -94,7 +94,7 @@ func (le *leagueClient) GetBySummonerID(summonerId string) (*LeagueEntry, error)
 }
 
 func (le *leagueClient) GetByTier(tier tier, division division, page int) (*[]*LeagueEntry, error) {
-	le.log.Debugf("getting %s%s leagues (page%d)", tier, division, page)
+	le.log.Infof("getting %s%s leagues (page%d)", tier, division, page)
 	body, err := le.get(fmt.Sprintf("/entries/%s/%s?page=%d", tier, division, page))
 	if err != nil {
 		le.log.Errorf("error getting %s%s leagues (page%d) : %s", tier, division, page, err.Error())
@@ -112,7 +112,7 @@ func (le *leagueClient) GetByTier(tier tier, division division, page int) (*[]*L
 }
 
 func (le *leagueClient) GetById(id string) (*LeagueList, error) {
-	le.log.Debugf("getting league %s", id)
+	le.log.Infof("getting league %s", id)
 	body, err := le.get(fmt.Sprintf("/leagues/%s", id))
 	if err != nil {
 		le.log.Errorf("error getting league %s : %s", id, err.Error())
